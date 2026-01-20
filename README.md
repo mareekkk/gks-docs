@@ -28,5 +28,6 @@ GKS prevents monolithic sprawl by separating responsibilities into discrete, ind
 1.  **[Memlink](./architecture/components.md#memlink)**: The **Memory Kernel**. Ingests chats, extracts facts, and provides the authoritative data plane.
 2.  **[Bifrost](./architecture/components.md#bifrost)**: The **Orchestrator**. Handles intent recognition, routing, and policy enforcement (Control Plane).
 3.  **[Einbroch](./architecture/components.md#einbroch)**: The **Executor**. A stateless service that safely runs agents and tools as directed by Bifrost.
-4.  **[Dispatcher](./architecture/components.md#dispatcher)**: The **Gateway**. Adapts external protocols (OpenAI API) into GKS internal workflows (Pattern A).
-5.  **[OpenWebUI](./architecture/components.md#openwebui)**: The **Frontend**. Provides the chat interface and user management layer.
+4.  **[Trust Kernel](./architecture/components.md#trust-kernel)**: The **Authority**. Issues and validates Trust Tokens for all system components.
+5.  **[Dispatcher](./architecture/components.md#dispatcher)**: The **Gateway**. Adapts external protocols (OpenAI API) into GKS internal workflows (Pattern A).
+6.  **[OpenWebUI](./architecture/components.md#openwebui)**: The **Frontend**. Provides the chat interface and user management layer.

@@ -13,7 +13,10 @@ curl -f http://localhost:8002/health
 # Orchestrator
 curl -f http://localhost:8000/health
 
-# Kernel
+# Trust Kernel
+curl -f http://localhost:8004/health
+
+# Memory Kernel
 curl -f http://localhost:3000/health
 ```
 

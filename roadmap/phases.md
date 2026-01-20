@@ -6,12 +6,13 @@
 *   [x] **Basic Retrieval**: Vector + SQL search.
 *   [x] **Dockerization**: Basic Compose setup.
 
-## Phase 1: Orchestration & Governance (Current)
+## Phase 1: Orchestration & Governance (Completed)
 **Goal**: Safe execution and OpenAI compatibility.
 *   [x] **Bifrost**: Intent Routing and Policy Decision Point.
 *   [x] **Einbroch**: Stateless Executor and Policy Enforcement.
 *   [x] **Dispatcher**: OpenAI Protocol Adapter.
 *   [x] **Identity Resolution**: "You are Mark" context injection.
+*   [x] **Trust Kernel**: Authority Service (Tokens, Tiers, Escalation).
 *   [ ] **Toolpack Expansion**: Add more tools beyond `util`.
 
 ## Phase 2: Scale & SaaS (Future)

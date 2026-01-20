@@ -21,7 +21,12 @@ GKS architecture follows a **Control Plane / Data Plane** separation pattern, wr
 *   **Component**: **Memlink**.
 *   **Function**: The "Memory". It ingests chat streams, extracts authoritative facts using background workers, and serves them via evidence-gated APIs. It owns the "Truth" of the system.
 
-### 4. The Presentation Layer
+### 4. The Authority Plane
+*   **Role**: Identity & Trust.
+*   **Component**: **Trust Kernel**.
+*   **Function**: Issues RS256 Trust Tokens, manages Trust Tiers (T0-T3), and handles high-risk escalation approvals.
+
+### 5. The Presentation Layer
 *   **Role**: User Interaction.
 *   **Component**: **OpenWebUI**.
 *   **Function**: Renders the chat interface, manages user sessions, and sends requests to the Gateway.
@@ -37,6 +42,8 @@ graph TD
     
     subgraph "GKS Core infrastructure"
         Gateway -->|Route Request| Bifrost[Bifrost Orchestrator]
+        Gateway -->|Fetch Token| Trust[Trust Kernel]
+        Trust -->|Trust Token| Gateway
         Bifrost -->|Fetch Evidence| Memlink[Memlink Kernel]
         Memlink --"(Data Plane)"--> DB[(Postgres)]
         
