@@ -27,6 +27,11 @@ poetry install
 poetry run uvicorn src.main:app --reload
 ```
 
+*   **Trust Kernel**: Port `8004`
+*   **Dispatcher**: Port `8003`
+*   **Einbroch**: Port `8002`
+*   **Bifrost**: Port `8000`
+
 ### Node Services (Memlink)
 Uses `pnpm`.
 

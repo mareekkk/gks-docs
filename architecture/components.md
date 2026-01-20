@@ -1,4 +1,11 @@
-# Component Reference
+
+## Trust Kernel
+*   **Type**: Service (Authority)
+*   **Responsibility**: Identity Assertion, Trust Tokens, Escalation Management.
+*   **Inputs**: Shared Secret + User/Tenant Context.
+*   **Outputs**: Signed Trust Tokens (`RS256` JWT).
+*   **Owned Data**: `trust_escalations`, `trust_tiers` (Config).
+*   **Dependencies**: None (Root of Trust).
 
 ## Bifrost
 *   **Type**: Service (Orchestrator)

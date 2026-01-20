@@ -7,7 +7,15 @@
     *   `POST /v1/chat/completions`: Standard streaming/blocking chat.
     *   `POST /v1/chat`: Internal rich metadata endpoint.
 
-## 2. Routing Contract (Bifrost)
+## 2. Authority Contract (Trust Kernel)
+*   **Endpoint**: `POST /v1/bootstrap/token`.
+*   **Output**: `TrustToken` (JWT).
+*   **Claims**:
+    *   `tier`: `T0` (Root) to `T3` (Untrusted).
+    *   `signer_id`: Unique key ID for provenance.
+*   **Signature**: `RS256` (Verified by Public Key in Einbroch).
+
+## 3. Routing Contract (Bifrost)
 *   **Input**: `UserChatRequest` (User query + Context).
 *   **Output**: `RoutingDecision` (JSON).
 *   **Key Fields**:

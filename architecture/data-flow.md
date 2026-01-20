@@ -17,6 +17,7 @@ This flow describes how a user's message is processed in real-time to generate a
     *   Einbroch initializes the Agent (e.g., `agent.analyst`).
     *   Agent generates a Plan.
     *   Agent requests Tool usage.
+    *   Einbroch **Verifies Trust Token**: Checks `RS256` signature and expiration.
     *   Einbroch validates Tool request against the `RoutingDecision` allowlist.
     *   Einbroch executes Tool (stateless, sandboxed).
     *   Einbroch returns `ExecutionResult` (Final Text + Trace).

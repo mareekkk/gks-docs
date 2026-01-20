@@ -12,8 +12,13 @@ Every successful response from `Dispatcher` includes a `metadata.execution_trace
     { "step": "plan", "content": "I will search memory..." },
     { "step": "tool", "name": "memlink.retrieve", "status": "ok" }
   ]
-}
 ```
+
+## Provenance
+Every artifact in the system (Fact, Summary, Execution) is tagged with:
+*   `signer_id`: Unique identifier of the Trust Token issuer.
+*   `trust_tier`: The assurance level (`T0`-`T3`) of the entity that created it.
+*   **Verification**: Check `memlink_memory_facts` or `memlink_graph_nodes` for these columns.
 
 ## Audit Logs (Database)
 Memlink provides deep observability into background cognition via Postgres tables:

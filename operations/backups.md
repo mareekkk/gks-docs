@@ -17,6 +17,10 @@ docker exec -t memlink-postgres-1 pg_dump -U postgres memlink > memlink_backup_$
 
 # Backup OpenWebUI
 docker exec -t openwebui-db-1 pg_dump -U postgres openwebui > openwebui_backup_$(date +%F).sql
+
+# Backup Trust Keys (CRITICAL)
+# Trust Kernel keys are stored on disk. Loss = Loss of Trust Authority.
+tar -czvf trust_keys_backup_$(date +%F).tar.gz trust-kernel/src/keys/
 ```
 
 ## Restoration

@@ -31,6 +31,7 @@ docker compose up -d --build
 This starts:
 *   **Bifrost** (Internal :8000)
 *   **Einbroch** (Internal :8000, Mapped :8002)
+*   **Trust Kernel** (Internal :8000, Mapped :8004)
 *   **Dispatcher** (Mapped :8003)
 
 ## Network Topology
