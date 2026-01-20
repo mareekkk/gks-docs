@@ -1,0 +1,16 @@
+# Secrets (Just in case)
+.env
+.env.*
+*.key
+*.pem
+
+# Build artifacts
+site/
+build/
+public/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.DS_Store
