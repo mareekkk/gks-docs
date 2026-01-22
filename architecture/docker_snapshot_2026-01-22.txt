@@ -1,0 +1,18 @@
+NAMES                  IMAGE                                 STATUS                    PORTS
+pronterlabs-chat       pronterlabs-chat-chat-app             Up 6 hours                0.0.0.0:8081->3000/tcp, [::]:8081->3000/tcp
+memlink-postgres       postgres:16-alpine                    Up 6 hours (healthy)      0.0.0.0:5434->5432/tcp, [::]:5434->5432/tcp
+memlink-worker         ghcr.io/mareekkk/memlink:versions     Up 6 hours (healthy)      
+memlink-api            ghcr.io/mareekkk/memlink:versions     Up 6 hours (healthy)      0.0.0.0:3002->3000/tcp, [::]:3002->3000/tcp
+memlink-watcher        45e9783836f6                          Up 16 hours (healthy)     
+memlink-ollama         ollama/ollama:latest                  Up 16 hours (unhealthy)   0.0.0.0:11434->11434/tcp, [::]:11434->11434/tcp
+memlink-redis          redis:7.2-alpine                      Up 16 hours (healthy)     0.0.0.0:6380->6379/tcp, [::]:6380->6379/tcp
+dispatcher-gateway     dispatcher-dispatcher                 Up 16 hours (healthy)     0.0.0.0:8003->8000/tcp, [::]:8003->8000/tcp
+dispatcher-authority   dispatcher-trust-kernel               Up 16 hours (healthy)     0.0.0.0:8004->8000/tcp, [::]:8004->8000/tcp
+dispatcher-execution   dispatcher-einbroch                   Up 16 hours (healthy)     0.0.0.0:8002->8000/tcp, [::]:8002->8000/tcp
+dispatcher-bifrost     dispatcher-bifrost                    Up 16 hours (unhealthy)   8000/tcp
+docker-server-1        ghcr.io/goauthentik/server:2024.2.1   Up 24 hours (healthy)     127.0.0.1:9100->9000/tcp, 127.0.0.1:9543->9443/tcp
+docker-worker-1        ghcr.io/goauthentik/server:2024.2.1   Up 24 hours (healthy)     
+docker-redis-1         redis:alpine                          Up 24 hours (healthy)     6379/tcp
+docker-postgresql-1    postgres:16-alpine                    Up 7 hours (healthy)      5432/tcp
+admin-dashboard        dashboard-admin-dashboard             Up 26 hours               0.0.0.0:9200->80/tcp, [::]:9200->80/tcp
+pronterlabs-website    pronterlabs-website                   Up 27 hours               0.0.0.0:8082->80/tcp, [::]:8082->80/tcp
