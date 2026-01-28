@@ -33,9 +33,17 @@
                      │  (future/optional data   │
                      │   persistence target)    │
                      └──────────────────────────┘
+                                   │
+                                   v
+                     ┌──────────────────────────┐
+                     │     Docker network       │
+                     │     pronter_shared       │
+                     │  (chat <-> memlink)      │
+                     └──────────────────────────┘
 ```
 
 Notes
 - Today, facts/summaries are stored in **memlink DB** (control plane + data).
 - Tenant DBs exist for **future/optional per-tenant persistence**.
 - Chat messages live in **pronterlabs_chat**.
+- Service-to-service connectivity uses the **pronter_shared** Docker network.
