@@ -2,6 +2,17 @@
 
 This timeline documents rollback points and the exact commands to restore each state.
 
+## 0) Discard **local UI refresh + recent chat wiring** (working tree only)
+**Description:** Removes uncommitted UI/recents changes and returns the chat app repo to `e914e15`.
+
+**Restore (discard working tree + untracked files):**
+```
+git -C /home/marek/pronterlabs/pronterlabs-chat reset --hard e914e15
+git -C /home/marek/pronterlabs/pronterlabs-chat clean -fd
+```
+
+---
+
 ## 1) Revert to **before the loading‑screen fix** (back to `f6487f4` state)
 **Description:** Removes the latest loading/auth refinements and returns to the initial silent‑preload implementation.
 
