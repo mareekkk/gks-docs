@@ -17,7 +17,7 @@
 ### Memlink (`memlink`)
 - **Ingestion**: `services/worker/src/runtime.ts` checks for `payload.messages`.
 - **Logic**: If `payload.messages` exists, it uses them directly (skipping DB).
-- **Legacy Path**: Contains `fetchChatRecord` which queries `openwebuiDb` (`chat` table). This path is currently bypassed when `messages` are provided.
+- **Legacy Path**: Contains `fetchChatRecord` which queries `chatDb` (`conversations`/`messages` tables). This path is currently bypassed when `messages` are provided.
 - **Persistence**: Persists *derived* data (summaries, facts, graph), but relies on the input payload for source truth.
 
 ## Required Changes for Reversion
@@ -28,11 +28,9 @@
     - `dispatcher` must STOP sending `messages` payload to Memlink, or `pronterlabs-chat` handles the trigger.
     - Given the race condition (Dispatcher triggering Memlink before Chat App saves Assistant response), `pronterlabs-chat` should likely be responsible for triggering Memlink (or `dispatcher` trigger must be delayed/removed).
     - *Decision*: We will move the Memlink trigger responsibility to `pronterlabs-chat` after it persists the complete turn.
-3.  **Memlink Config**: Memlink's `openwebuiDb` connection (or Tenant DB) must point to the new Chat App Database.
-4.  **Schema**: Need to recreate the `chat` table schema compatible with `memlink`'s expectation (or update `memlink` to match new schema).
-    - Memlink expects `chat` table with `chat::json`, `title`, `user_id`. The `chat` column is a JSON blob containing `messages`.
-    - *However*, Phase 2 task is "Design chat database schema: conversations, messages, participants". This implies a normalized schema, not just a JSON blob.
-    - If we use a normalized schema (better), we must update `memlink` to read from that schema instead of the OpenWebUI JSON blob.
+3.  **Memlink Config**: Memlink's `chatDb` connection (or Tenant DB) must point to the Chat App database.
+4.  **Schema**: Use a normalized chat schema (`conversations`, `messages`, optional `participants`) and keep Memlink reading from those tables (no JSON blob dependency).
+    - If a compatibility view is needed, expose a `chat` view that aggregates messages for legacy tooling, but Memlink should not rely on it.
 
 ## Next Steps
 Proceed to Phase 2: Data Model Restoration.

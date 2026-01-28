@@ -42,7 +42,7 @@
 *   **Owned Data**: None (Stateless).
 *   **Dependencies**: Bifrost, Einbroch.
 
-## OpenWebUI
+## PronterLabs Chat
 *   **Type**: Service (Frontend)
 *   **Responsibility**: User Interface, History persistence, User Management.
 *   **Inputs**: User keystrokes.

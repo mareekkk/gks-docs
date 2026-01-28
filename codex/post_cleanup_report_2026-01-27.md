@@ -19,3 +19,4 @@ Date: 2026-01-28 04:19:27 UTC
 ## Notes
 - All other users, tenants, and related data were removed.
 - Tenant databases (memlink_tenant_master, tenant_dev) were cleared.
+- **Update (2026-01-28):** `memlink_tenant_master` and `tenant_dev` were removed, and a shared `tenant_db` now holds facts/summaries.

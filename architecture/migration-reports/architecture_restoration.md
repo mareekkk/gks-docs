@@ -10,7 +10,7 @@ Successfully reverted the PronterLabs Chat architecture to the usage of durable 
 - **Schema**:
   - `conversations`: Stores chat metadata (id, title, user_id).
   - `messages`: Stores individual messages with roles and content.
-  - `chat` (View): Provides a JSON-aggregated view of chats for Memlink compatibility, matching legacy OpenWebUI format.
+  - `chat` (View): Provides a JSON-aggregated view of chats for Memlink compatibility, matching legacy PronterLabs Chat format.
 
 ### 2. PronterLabs Chat App
 - **Persistence**: Implemented `pg` client and `src/app/api/chat/route.ts`.
@@ -24,7 +24,7 @@ Successfully reverted the PronterLabs Chat architecture to the usage of durable 
 
 ### 3. Memlink Service
 - **Refactor**: Disabled "Direct Payload Injection" in `runtime.ts`.
-- **Config**: Pointed `OPENWEBUI_DATABASE_URL` to `pronterlabs_chat` database.
+- **Config**: Pointed `CHAT_DATABASE_URL` to `pronterlabs_chat` database.
 - **Logic**: Now fetches chat history from the `chat` view in the database via `fetchChatRecord` instead of trusting payload arrays.
 
 ### 4. Dispatcher
@@ -54,4 +54,4 @@ graph TD
 ## Validation Status
 - **Schema**: Applied and verified.
 - **Services**: Rebuilding and restarted with new configuration.
-- **Network**: Connectivity between `pronterlabs-chat` (gks_net) and `memlink-postgres` (via openwebui network) established.
+- **Network**: Connectivity between `pronterlabs-chat` (gks_net) and `memlink-postgres` (shared chat network) established.

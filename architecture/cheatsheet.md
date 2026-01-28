@@ -15,7 +15,7 @@ It’s a **governed AI runtime** where:
 - **Dispatcher** is the gateway that **validates identity**, **exchanges for authority**, and **orchestrates** the request.
 - **Bifrost** is the **policy + routing** layer that decides what to call (memory, tools, etc.) under the TrustToken.
 - **Einbroch** is the **tool executor** where “side effects” live; it enforces **risk gates**.
-- **Memlink** is the **memory/control plane** that stores and retrieves durable memory artifacts (facts, summaries, provenance, etc.) per tenant DB.
+- **Memlink** is the **memory/control plane** that stores and retrieves durable memory artifacts (facts, summaries, provenance, etc.) in the shared `tenant_db` with tenant scoping.
 
 ---
 
@@ -90,10 +90,10 @@ It’s a **governed AI runtime** where:
 - Retrieval APIs for facts/summaries
 - Watcher/Worker pipelines that extract and maintain memory artifacts
 
-**Important clarification (your preference)**
-- **Tenant DBs are the memory storage.**
-- The “Master Tenant” (aka **default tenant**) is the **first tenant DB**.
-- Memlink may also act as a control-plane, but memory itself lives per tenant DB.
+**Important clarification (current design)**
+- **`tenant_db` is the memory storage** (shared DB with `tenant_*` tables + tenant scoping).
+- The “Master Tenant” (aka **default tenant**) is the **first tenant_id** within `tenant_db`.
+- Memlink remains the control-plane; memory lives in `tenant_db`.
 
 **You change Memlink when**
 - You want to improve memory quality (extraction prompts/filters)
@@ -106,7 +106,7 @@ It’s a **governed AI runtime** where:
 ### 6) Identity Provider (Authentik / OIDC) — optional but now working
 **Owns**
 - User authentication (password, MFA)
-- Issuing OIDC tokens (JWT) to clients (OpenWebUI previously, Admin UI later)
+- Issuing OIDC tokens (JWT) to clients (PronterLabs Chat previously, Admin UI later)
 - User lifecycle at the identity plane
 
 **You change Authentik when**
@@ -120,9 +120,9 @@ It’s a **governed AI runtime** where:
 In many systems “default tenant” means the first tenant.  
 In your system, call it **Master Tenant** (same meaning):
 
-- **Master Tenant = the first tenant DB** created for you (owner/operator).
+- **Master Tenant = the first tenant_id** created for you (owner/operator) inside `tenant_db`.
 - Admin privileges can be defined as **T0/T1 on Master Tenant**.
-- Future tenants are separate DBs (or separate schemas) as your multi-tenant plan dictates.
+- Future tenants are separate **tenant_id** rows (or separate schemas later, if you choose).
 
 ---
 

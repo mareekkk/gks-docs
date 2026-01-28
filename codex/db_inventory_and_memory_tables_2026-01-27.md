@@ -1,16 +1,13 @@
 # Memlink DB Inventory & Memory Tables
-Date: 2026-01-27
+Date: 2026-01-28
 
 ## Databases (memlink-postgres)
 | datname | owner |
 |--- | ---|
-| datname-towner |  |
-| memlink-tmemlink_user |  |
-| memlink_tenant_master-tmemlink_user |  |
-| postgres-tmemlink_user |  |
-| pronterlabs_chat-tmemlink_user |  |
-| tenant_dev-tmemlink_user |  |
-| (5 rows) |  |
+| memlink | memlink_user |
+| postgres | memlink_user |
+| pronterlabs_chat | memlink_user |
+| tenant_db | memlink_user |
 
 ## Roles
 | rolname | rolsuper | rolbypassrls |
@@ -60,6 +57,18 @@ Date: 2026-01-27
 | public-ttenant_schema_migrations |  |
 | (20 rows) |  |
 
+## Tables in tenant_db (public schema)
+| schema | table |
+|--- | ---|
+| public-ttenant_chat_summaries |  |
+| public-ttenant_segment_summaries |  |
+| public-ttenant_memory_facts |  |
+| public-ttenant_embeddings |  |
+| public-ttenant_query_audit |  |
+| public-ttenant_graph_nodes |  |
+| public-ttenant_graph_edges |  |
+| (7 rows) |  |
+
 ## Tables in pronterlabs_chat (public schema)
 | schema | table |
 |--- | ---|
@@ -93,24 +102,19 @@ Date: 2026-01-27
 | (26 rows) |  |
 
 ## memlink DB: Users → Facts → Summaries
-| user_id | tenant_id | fact_count | last_fact_at | fact_samples | summary_count | last_summary_at | last_summary_excerpt |
-|--- | --- | --- | --- | --- | --- | --- | ---|
-| user_id-ttenant_id-tfact_count-tlast_fact_at-tfact_samples-tsummary_count-tlast_summary_at-tlast_summary_excerpt |  |  |  |  |  |  |  |
-| 1024f697-2222-469f-8674-6762ae816297-t92211379-e2f4-4bd9-90c6-5fe701277544-t0-t-t-t2-t2026-01-23 08:38:55.758056+00-tThe user asked about their favorite number, and the assistant confirmed it as 10 |  |  |  |  |  |  |  |
-| 97b572b207892a97bdf3912705cf12bd9744ff38a7d9505ca48767cbd0ab07e1-t0446ba0d-f10c-459a-8d1b-5988562164ca-t5-t2026-01-27 15:40:52.038553+00-tUser is hired by Sodexo \| User is a chef in the mining industry \| User provides IFMS services in Pannawonica Village-t5-t2026-01-27 18:13:10.100896+00-tMark, a chef employed by Sodexo at Pannawonica Village in the mining industry, a |  |  |  |  |  |  |  |
-| 99520000-0000-0000-0000-000000000000-tea7cf290-a311-4237-addf-bec5d7464435-t5-t2026-01-20 16:35:42.01976+00-tUser's sister's name is Ailene. \| User's company is Canary Builds. \| User's name is Mark.-t21-t2026-01-23 02:55:02.25077+00-tThe user shared that their favorite number is 1019, and the assistant acknowledg |  |  |  |  |  |  |  |
-| 99520000-0000-0000-0000-000000000000-t57c9864f-26fb-4d10-915e-8a3e2df5bb62-t0-t-t-t20-t2026-01-23 08:44:38.420789+00-tThe user stated their favorite number is 1020, but the assistant mistakenly reca |  |  |  |  |  |  |  |
-| b294165d-dd72-47d5-aca0-6f35126967a6-t5b6909b6-49b0-4e49-8864-2b3dcdabcfb9-t0-t-t-t1-t2026-01-23 08:39:03.474598+00-tUser shared that their favorite number is 1002, and assistant confirmed updating |  |  |  |  |  |  |  |
-| test-user-phase3-tc2287065-a235-455f-85cb-a2c29669e4c4-t2-t2026-01-27 04:19:23.291892+00-tUser's secret code is CODE_1769487556762 \| User's secret code is CODE_1769487476748-t2-t2026-01-27 05:19:11.48093+00-tUser shared their secret code: CODE_1769487556762. |  |  |  |  |  |  |  |
-| test-user-phase3-tc2c3637d-6975-4d30-a4dc-a6ed6409c2e7-t1-t2026-01-27 04:02:54.080331+00-tThe secret code is MANUAL_123-t0-t-t |  |  |  |  |  |  |  |
-| user_a_final-t81176768-0b6a-43b1-8ff9-f754fd39a12b-t0-t-t-t9-t2026-01-23 05:14:34.850798+00-tThe user has provided labels for Items 0 through 9, with each item assigned a sp |  |  |  |  |  |  |  |
-| user_a_final_v2-te543e6d0-bd73-491c-97ab-d1f74af4d978-t0-t-t-t16-t2026-01-23 08:03:38.983225+00-tThe user shared the names of their ten pet dogs numbered 0 to 9, but the assista |  |  |  |  |  |  |  |
-| user_b_final-t533edcf9-9333-4f29-896e-0fb36bca333f-t0-t-t-t5-t2026-01-23 05:20:00.971247+00-tThe user provided labels for Items 0 through 9, which the assistant acknowledged |  |  |  |  |  |  |  |
-| user_b_final_v2-t1cec6afa-4b88-4553-9240-a7b7b7fe8028-t0-t-t-t8-t2026-01-23 08:08:27.44375+00-tThe user shared names for 10 pet dogs numbered 0 to 9, but the assistant failed  |  |  |  |  |  |  |  |
-| -t-t18-t2026-01-21 01:27:33.317515+00-tUser's swing schedule in FIFO is 2:1. \| User lives in Sydney \| User is developing a memory for AI called Pronterlabs.-t0-t-t |  |  |  |  |  |  |  |
-| (12 rows) |  |  |  |  |  |  |  |
+Control plane only (facts/summaries cleared).
+
+| facts | summaries | segments |
+|---|---|---|
+| 0 | 0 | 0 |
+
+## tenant_db: Users → Facts → Summaries (current)
+| user_id | tenant_id | fact_count | last_fact_at | summary_count | last_summary_at |
+|--- | --- | --- | --- | --- | ---|
+| 97b572b207892a97bdf3912705cf12bd9744ff38a7d9505ca48767cbd0ab07e1 | 0446ba0d-f10c-459a-8d1b-5988562164ca | 8 | 2026-01-28 08:11:58.33159+00 | 10 | 2026-01-28 08:43:40.864737+00 |
 
 ## pronterlabs_chat DB: Users → Facts → Summaries
+Legacy snapshot only (memlink no longer reads artifacts from `pronterlabs_chat`).
 | user_id | tenant_id | fact_count | last_fact_at | fact_samples | summary_count | last_summary_at | last_summary_excerpt |
 |--- | --- | --- | --- | --- | --- | --- | ---|
 | user_id-ttenant_id-tfact_count-tlast_fact_at-tfact_samples-tsummary_count-tlast_summary_at-tlast_summary_excerpt |  |  |  |  |  |  |  |

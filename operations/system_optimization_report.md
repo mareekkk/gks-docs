@@ -75,10 +75,10 @@ A complete chain of custody for Trust Data was implemented:
 1.  **Dispatcher**:
     - Decodes the Trust Token claims (`tier`, `signer_id`) upon fetch.
     - Injects these claims into the Chat Completion Response under `choices[0].message.metadata.trust`.
-2.  **OpenWebUI**:
+2.  **PronterLabs Chat**:
     - Persists the full JSON response (including metadata) to its `chat` database.
 3.  **Memlink Watcher**:
-    - Reads the `chat` JSON blob from OpenWebUI DB.
+    - Reads the `chat` JSON blob from PronterLabs Chat DB.
 4.  **Memlink Worker**:
     - Extracts `trust_tier` and `signer_id` from the message metadata.
     - Attaches this provenance to every extracted **Fact** and **Graph Node**.

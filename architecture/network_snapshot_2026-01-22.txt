@@ -5,4 +5,4 @@ a2aadc961c61   docker_default       bridge    local
 47c0b9311724   host                 host      local
 7811632a26b3   memlink_default      bridge    local
 269399eeac61   none                 null      local
-fde296d0f004   openwebui_default    bridge    local
+fde296d0f004   pronterlabs-chat_default    bridge    local

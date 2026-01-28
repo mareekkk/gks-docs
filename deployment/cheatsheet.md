@@ -36,7 +36,7 @@ It is a **governed AI platform** with **explicit planes**:
 | Change permissions / tiers | **Trust Kernel** |
 | Change routing / policy logic | **Bifrost** |
 | Improve latency / reliability | Dispatcher / Memlink / Bifrost |
-| Change chat UX or persona | OpenWebUI (temporary) |
+| Change chat UX or persona | PronterLabs Chat (temporary) |
 
 ---
 
@@ -134,23 +134,23 @@ Durable, governed memory pipelines — **not identity storage**.
 
 **Important:**  
 Memlink **does not own tenancy**.  
-Tenants live in **separate tenant databases**.  
+Tenants live inside the shared **tenant_db** (scoped by `tenant_id`).  
 Memlink is a **control plane**, not a user profile DB.
 
 ---
 
-### 🖥 OpenWebUI — *Temporary UI Plane*
+### 🖥 PronterLabs Chat — *Temporary UI Plane*
 **Role:**  
 User interface only.
 
-**You touch OpenWebUI when you want to:**
+**You touch PronterLabs Chat when you want to:**
 - Change chat UI behavior
 - Configure OIDC login
 - Adjust frontend UX
 - Test flows before your custom UI replaces it
 
 **Long-term:**  
-OpenWebUI is replaceable. GKS logic does **not** live here.
+PronterLabs Chat is replaceable. GKS logic does **not** live here.
 
 ---
 

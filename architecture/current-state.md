@@ -1,7 +1,9 @@
 # Current State Architecture (Audit Phase)
 
 **Date:** 2026-01-22
-**Status:** Fragmented / Disconnected
+**Status:** Fragmented / Disconnected (Historical Snapshot)
+
+> **2026-01-28 Update**: The system is now wired. PronterLabs Chat writes to `pronterlabs_chat` + outbox, memlink watcher/worker process those events, and memory artifacts live in the shared `tenant_db` (tenant-scoped `tenant_*` tables). Retrieval reads from `tenant_db` via `memlink-api`.
 
 ## 1. Chat Persistence (`pronterlabs-chat`)
 - **Mechanism:** HTTP POST to `/api/chat` (Next.js App Router).

@@ -13,7 +13,7 @@ The repositories share a parent folder (`llm-server/`).
   bifrost/
   einbroch/
   dispatcher/
-  openwebui/
+  pronterlabs-chat/
 ```
 
 ## Running Components Individually

@@ -28,7 +28,7 @@ GKS architecture follows a **Control Plane / Data Plane** separation pattern, wr
 
 ### 5. The Presentation Layer
 *   **Role**: User Interaction.
-*   **Component**: **OpenWebUI**.
+*   **Component**: **PronterLabs Chat**.
 *   **Function**: Renders the chat interface, manages user sessions, and sends requests to the Gateway.
 
 ---
@@ -37,7 +37,7 @@ GKS architecture follows a **Control Plane / Data Plane** separation pattern, wr
 
 ```mermaid
 graph TD
-    User[User / Client] -->|HTTPS| Web[OpenWebUI]
+    User[User / Client] -->|HTTPS| Web[PronterLabs Chat]
     Web -->|POST /v1/chat| Gateway[Dispatcher]
     
     subgraph "GKS Core infrastructure"

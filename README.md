@@ -17,7 +17,7 @@ Standard LLM chat applications suffer from:
 *   **Multi-Tenancy**: Physically isolates data and policies per tenant.
 
 ## Non-Goals
-*   **Not a Chat UI**: GKS is a backend infrastructure; it pairs with frontends like OpenWebUI.
+*   **Not a Chat UI**: GKS is a backend infrastructure; it pairs with frontends like PronterLabs Chat.
 *   **Not a Black Box**: Every decision, retrieval, and execution step is audit-logged and traceable.
 *   **Not a Vector DB Wrapper**: It uses a structured domain model (facts, summaries, segments) first, with vectors as an optimization.
 
@@ -76,4 +76,4 @@ GKS prevents monolithic sprawl by separating responsibilities into discrete, ind
 3.  **[Einbroch](./architecture/components.md#einbroch)**: The **Executor**. A stateless service that safely runs agents and tools as directed by Bifrost.
 4.  **[Trust Kernel](./architecture/components.md#trust-kernel)**: The **Authority**. Issues and validates Trust Tokens for all system components.
 5.  **[Dispatcher](./architecture/components.md#dispatcher)**: The **Gateway**. Adapts external protocols (OpenAI API) into GKS internal workflows (Pattern A).
-6.  **[OpenWebUI](./architecture/components.md#openwebui)**: The **Frontend**. Provides the chat interface and user management layer.
+6.  **[PronterLabs Chat](./architecture/components.md#pronterlabs-chat)**: The **Frontend**. Provides the chat interface and user management layer.

@@ -4,7 +4,7 @@
 
 This flow describes how a user's message is processed in real-time to generate a response.
 
-1.  **Ingress**: User sends message context via **OpenWebUI**.
+1.  **Ingress**: User sends message context via **PronterLabs Chat**.
 2.  **Adaptation**: **Dispatcher** receives `POST /v1/chat`, generates a unique `request_id`, and creates the "Identity Context" (wrapping facts with "You are...").
 3.  **Routing**:
     *   Dispatcher calls **Bifrost** (`POST /v1/route`).
@@ -21,13 +21,13 @@ This flow describes how a user's message is processed in real-time to generate a
     *   Einbroch validates Tool request against the `RoutingDecision` allowlist.
     *   Einbroch executes Tool (stateless, sandboxed).
     *   Einbroch returns `ExecutionResult` (Final Text + Trace).
-6.  **Response**: Dispatcher formats the result into an OpenAI-compatible response and sends it to OpenWebUI.
+6.  **Response**: Dispatcher formats the result into an OpenAI-compatible response and sends it to PronterLabs Chat.
 
 ## 2. Memory Ingestion Flow (Asynchronous)
 
 This flow describes how short-term chat logs become long-term authoritative memory.
 
-1.  **Persistence**: OpenWebUI saves the user message and assistant response to its PostgreSQL database (`chat` table).
+1.  **Persistence**: PronterLabs Chat saves the user message and assistant response to its PostgreSQL database (`chat` table).
 2.  **Detection**: **Memlink Watcher** polls the database for new message rows.
 3.  **Job Creation**: Watcher enqueues a `summarize` job in the `memlink_jobs` table.
 4.  **Processing**:
