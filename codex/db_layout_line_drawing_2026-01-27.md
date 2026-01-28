@@ -17,21 +17,20 @@
                                    v
                      ┌──────────────────────────┐
                      │       memlink DB         │
-                     │  (control plane + facts  │
-                     │   right now)             │
+                     │      (control plane)     │
                      │  - tenants/configs       │
+                     │  - mappings              │
                      │  - jobs/audit            │
-                     │  - facts/summaries       │
                      └─────────────┬────────────┘
                                    │
-                                   │ (optional tenant routing)
+                                   │ tenant routing (active)
                                    v
                      ┌──────────────────────────┐
-                     │  tenant DBs (per-tenant) │
-                     │  memlink_tenant_master   │
-                     │  tenant_dev              │
-                     │  (future/optional data   │
-                     │   persistence target)    │
+                     │       tenant_db          │
+                     │   (shared tenant data)   │
+                     │  - tenant_* tables       │
+                     │  - facts/summaries       │
+                     │  - embeddings/graph      │
                      └──────────────────────────┘
                                    │
                                    v
@@ -43,7 +42,7 @@
 ```
 
 Notes
-- Today, facts/summaries are stored in **memlink DB** (control plane + data).
-- Tenant DBs exist for **future/optional per-tenant persistence**.
+- Facts/summaries now live in **tenant_db** (shared tenant data store).
+- **memlink DB** is control plane only (tenants/configs/mappings + jobs/audit).
 - Chat messages live in **pronterlabs_chat**.
 - Service-to-service connectivity uses the **pronter_shared** Docker network.
