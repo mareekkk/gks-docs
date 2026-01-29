@@ -177,3 +177,26 @@ docker compose -f /home/marek/pronterlabs/dispatcher/docker-compose.yml up -d tr
 # Then recreate the bifrost container:
 docker compose -f /home/marek/pronterlabs/dispatcher/docker-compose.yml up -d --build --no-deps bifrost
 ```
+
+---
+
+## 10) Pre‑fix baseline for **False Escalation** changes (Bifrost + Dispatcher)
+**Description:** Restore point before applying the structured‑envelope + policy scoping fix for false “Human approval required” escalations.
+
+**Safe revert (preserves history):**
+```
+git -C /home/marek/pronterlabs/bifrost revert <commit_after_eb300ac>
+git -C /home/marek/pronterlabs/bifrost push origin hardening/2026-01-22-baseline
+
+git -C /home/marek/pronterlabs/dispatcher revert <commit_after_7ad051b>
+git -C /home/marek/pronterlabs/dispatcher push origin master
+```
+
+**Hard reset (rewrites history):**
+```
+git -C /home/marek/pronterlabs/bifrost reset --hard eb300ac
+git -C /home/marek/pronterlabs/bifrost push origin hardening/2026-01-22-baseline --force
+
+git -C /home/marek/pronterlabs/dispatcher reset --hard 7ad051b
+git -C /home/marek/pronterlabs/dispatcher push origin master --force
+```
