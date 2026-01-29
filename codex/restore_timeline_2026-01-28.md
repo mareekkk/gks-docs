@@ -152,3 +152,15 @@ git -C /home/marek/pronterlabs/dispatcher push origin master --force
 # Then recreate the trust-kernel container:
 docker compose -f /home/marek/pronterlabs/dispatcher/docker-compose.yml up -d trust-kernel
 ```
+
+---
+
+## 8) Trust‑Kernel OIDC audience alignment (client_id)
+**Description:** Aligns Trust‑Kernel `OIDC_AUDIENCE` with the Authentik client_id used by PronterLabs Chat so `/v1/auth/exchange` validates tokens.
+
+**Operational rollback:**
+```
+# Restore OIDC_AUDIENCE to the previous value (e.g., pronterlabs-dashboard)
+# Then recreate trust-kernel:
+docker compose -f /home/marek/pronterlabs/dispatcher/docker-compose.yml up -d trust-kernel
+```
