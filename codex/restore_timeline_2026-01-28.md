@@ -13,6 +13,23 @@ git -C /home/marek/pronterlabs/pronterlabs-chat clean -fd
 
 ---
 
+## 0.1) Restore to **UI refresh + recent chat wiring** (latest, `8e4a050`)
+**Description:** Restores the chat app to the latest UI refresh and recent‑chat wiring.
+
+**Hard reset (rewrites history):**
+```
+git -C /home/marek/pronterlabs/pronterlabs-chat reset --hard 8e4a050
+git -C /home/marek/pronterlabs/pronterlabs-chat push origin main --force
+```
+
+**Safe revert (preserves history):**
+```
+git -C /home/marek/pronterlabs/pronterlabs-chat revert 8e4a050
+git -C /home/marek/pronterlabs/pronterlabs-chat push origin main
+```
+
+---
+
 ## 1) Revert to **before the loading‑screen fix** (back to `f6487f4` state)
 **Description:** Removes the latest loading/auth refinements and returns to the initial silent‑preload implementation.
 
