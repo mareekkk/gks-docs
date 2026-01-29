@@ -1,0 +1,155 @@
+# Implementation Plan: Follow‑Up + Recency + Canary Identity (2026‑01‑29)
+
+Purpose: fix canary identification, prevent legacy memory injection from overriding topic, and enable follow‑up/recency retrieval in a controlled rollout. This doc records the plan and the full context.
+
+## Executive summary
+The feature is not behaving as intended because the **legacy “Relevant Memory” injection still runs** and **identity exchange fails (503)**, so the canary allowlist is not matched. We must:
+1) make identity exchange reliable so canary matching works, and
+2) disable legacy memory injection for canary users to avoid topic hijacking.
+
+## Current symptoms
+- The assistant answers using personal facts (chef, FIFO, etc.) even when the topic is white papers.
+- Logs show `Relevant Memory` is still injected into the prompt.
+- Dispatcher logs show `trust-kernel /v1/auth/exchange` returns **503**, so claims (sub/email) are not available.
+
+## Root causes (from logs)
+1) **Identity exchange failing**: 503 from Trust Kernel prevents dispatcher from matching canary allowlist by `sub` or `email`.
+2) **Legacy memory injection active**: `pronterlabs-chat` still calls memlink and injects `Relevant Memory` for every message.
+3) **Canary gating relies on claims**: if `sub/email` can’t be decoded, canary is not recognized, even if the list contains `akadmin`.
+
+## Goals
+- Reliable identity exchange so canary matching works.
+- Canary users get the new follow‑up/recency pipeline.
+- Legacy memory injection does not override the current topic for canary users.
+- Safe rollout with clear rollback.
+
+## Constraints
+- No breaking changes to existing non‑canary behavior.
+- No schema changes required for this phase.
+- Feature flags default OFF; canary allowlist overrides OFF for test users.
+
+---
+
+## Implementation plan (staged)
+
+### Phase 0 — Stabilize identity exchange (blocking)
+**Objective:** ensure Trust Kernel exchange is healthy so we can read `sub`/`email` and match canary.
+
+Steps:
+1) Verify Trust Kernel health from dispatcher:
+   - Check `dispatcher-gateway` logs for `auth/exchange` errors.
+2) Inspect Trust Kernel service health (in docker):
+   - Confirm `dispatcher-authority` is healthy.
+3) If 503 persists, restart Trust Kernel stack:
+   - Restart `dispatcher-authority` and re‑test.
+4) If still 503, inspect Trust Kernel logs for upstream errors.
+
+Success criteria:
+- Dispatcher logs show `auth/exchange` is 200 OK.
+- Can read claims: `sub`, `email`, `tenant_id`.
+
+Rollback:
+- None (service restart only).
+
+---
+
+### Phase 1 — Canary recognition & legacy injection control
+**Objective:** ensure canary user triggers new pipeline and avoids legacy memory injection.
+
+Steps:
+1) Confirm canary allowlist includes:
+   - `97b572b207...` (sub)
+   - `mark@canarybuilds.com`
+   - `akadmin` (username for fallback; only works if claims exist)
+2) Verify dispatcher logic:
+   - For canary users: skip legacy `Relevant Memory` prepend and run follow‑up/recency path.
+3) Confirm `pronterlabs-chat` still injects `Relevant Memory` (legacy), but dispatcher **ignores it** for canary users.
+
+Success criteria:
+- Dispatcher log input **does NOT** show the `Relevant Memory` block when canary user is present.
+- Follow‑up resolver logs appear for canary user.
+
+Rollback:
+- Remove canary entries from `FOLLOWUP_CANARY_USERS` or set flags OFF.
+
+---
+
+### Phase 2 — Enable conversation state + follow‑up resolver (canary only)
+**Objective:** make short follow‑ups reuse previous topic context.
+
+Steps:
+1) Enable per‑user canary behavior (already done via allowlist).
+2) Verify follow‑up resolver produces `rewritten_query` for short follow‑ups.
+3) If follow‑up resolver fails, verify heuristic fallback is used.
+
+Success criteria:
+- Asking “What about for software?” after “What is a white paper?” yields a continuation, not a new unrelated question.
+
+Rollback:
+- Remove canary allowlist or turn off `FEATURE_FOLLOWUP_RESOLVER`.
+
+---
+
+### Phase 3 — Two‑pass retrieval (recency + long‑term)
+**Objective:** add short‑term recency context without breaking long‑term memory.
+
+Steps:
+1) Confirm dispatcher can reach tenant DB:
+   - `TENANT_DB_URL` reachable from dispatcher.
+2) Recency query returns `tenant_chat_summaries` for chat.
+3) Merge logic injects `RECENT_CONTEXT` and retains factual memory.
+
+Success criteria:
+- Short‑term summary appears in injected context for canary.
+- Long‑term facts still retrieved as before (no regression).
+
+Rollback:
+- Disable `FEATURE_TWO_PASS_RETRIEVAL` or remove canary allowlist.
+
+---
+
+### Phase 4 — Canary validation test plan
+**Manual test sequence (canary user only):**
+1) Ask: “What is a white paper?”
+2) Ask: “What about for software?”
+3) Confirm assistant uses the white‑paper context.
+4) Ask a personal recall question to validate facts retrieval still works.
+
+Expected outcome:
+- Follow‑up is contextual; facts are not overriding the topic unless relevant.
+
+---
+
+## Observability checklist
+- Dispatcher logs show:
+  - auth exchange 200
+  - follow‑up resolution output
+  - no `Relevant Memory` prepend for canary
+- Bifrost logs show:
+  - `chatId` set from `X-Chat-Id`
+- PronterLabs chat logs show:
+  - still injecting `Relevant Memory` (legacy); OK for non‑canary
+
+---
+
+## Rollback plan
+1) Disable canary allowlist (remove user from `FOLLOWUP_CANARY_USERS`).
+2) Set feature flags OFF (already default).
+3) Restart dispatcher.
+4) If needed, revert dispatcher commits (use restore timeline doc).
+
+---
+
+## Open risks
+- Trust Kernel 503 prevents canary matching.
+- Legacy memory injection can still bias the prompt if canary is not matched.
+- If tenant DB is unavailable, recency falls back safely but reduces quality.
+
+---
+
+## Files & settings touched (reference)
+- `pronterlabs/dispatcher/src/api.py`
+- `pronterlabs/dispatcher/src/context/*`
+- `pronterlabs/dispatcher/docker-compose.yml`
+- `FOLLOWUP_CANARY_USERS`, `TENANT_DB_URL`, `REDIS_URL`
+
