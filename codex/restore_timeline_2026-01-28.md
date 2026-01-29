@@ -140,3 +140,15 @@ git -C /home/marek/pronterlabs/dispatcher push origin master
 git -C /home/marek/pronterlabs/dispatcher reset --hard 5d167fe^
 git -C /home/marek/pronterlabs/dispatcher push origin master --force
 ```
+
+---
+
+## 7) Trust‑Kernel JWKS reachability fix (auth.pronterlabs.com host mapping)
+**Description:** Ensures Trust‑Kernel can fetch JWKS from Authentik by resolving `auth.pronterlabs.com` to the Docker host gateway (not 127.0.0.1). This is required for `/v1/auth/exchange` to succeed and canary matching to work.
+
+**Operational rollback (if mapping is added via docker-compose):**
+```
+# Remove the extra_hosts mapping for auth.pronterlabs.com in dispatcher/docker-compose.yml
+# Then recreate the trust-kernel container:
+docker compose -f /home/marek/pronterlabs/dispatcher/docker-compose.yml up -d trust-kernel
+```
