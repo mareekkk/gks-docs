@@ -164,3 +164,16 @@ docker compose -f /home/marek/pronterlabs/dispatcher/docker-compose.yml up -d tr
 # Then recreate trust-kernel:
 docker compose -f /home/marek/pronterlabs/dispatcher/docker-compose.yml up -d trust-kernel
 ```
+
+---
+
+## 9) Bifrost Memlink URL fix (use /v1/retrieve)
+**Description:** Ensures Bifrost hits the correct Memlink endpoint so evidence is returned (facts/summaries flow back into responses).
+
+**Operational rollback:**
+```
+# Restore MEMLINK_URL to the previous value in dispatcher/docker-compose.yml:
+#   MEMLINK_URL=http://memlink-api:3000
+# Then recreate the bifrost container:
+docker compose -f /home/marek/pronterlabs/dispatcher/docker-compose.yml up -d --build --no-deps bifrost
+```
