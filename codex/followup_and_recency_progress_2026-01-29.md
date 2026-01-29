@@ -4,8 +4,6 @@ Purpose: document the ongoing implementation of conversation state, follow-up re
 
 ## Current status
 - Work in progress. Code changes exist but are not yet rebuilt/redeployed.
-- Updated two-pass retrieval to use segment summaries + memory facts with legacy table fallbacks.
-- Follow-up resolution now always drives the effective query sent to agents.
 - Feature flags are default OFF in compose; canary allowlist is set for akadmin.
 
 ## Progress timeline
@@ -36,8 +34,7 @@ Files:
   - Heuristic resolver + optional OpenAI resolver.
   - Added JSON parsing hardening (strip code fences, extract JSON object if wrapped).
 - `pronterlabs/dispatcher/src/context/recency.py`
-  - Tenant DB pool + fetch recent segment summaries from `memlink_segment_summaries` (fallbacks to `tenant_segment_summaries` / `chat_segment_summaries`).
-  - Adds memory fact retrieval from `memlink_memory_facts` (fallbacks to `tenant_memory_facts` / `memory_facts`).
+  - Tenant DB pool + fetch recent summaries from `tenant_chat_summaries`.
   - Uses `set_config` for RLS variables (tenant/user).
   - Logs and fails open if DB connection fails.
 
@@ -50,9 +47,8 @@ Files:
   - Loads/updates conversation state.
   - Runs follow‑up resolver and rewrites query if needed.
   - Clarify gate returns a clarification response when the resolver flags ambiguity.
-  - Two‑pass retrieval: fetches recent segment summaries + long‑term memory facts.
+  - Two‑pass retrieval: fetches recency summaries from tenant DB (short‑term context).
   - Injects follow‑up metadata + recency context into the final prompt input.
-  - Uses rewritten query as the effective user request for execution.
   - Updates conversation state after assistant reply.
 
 ### 5) Dispatcher: startup/shutdown hooks (done)
@@ -123,3 +119,4 @@ File:
 - `pronterlabs/dispatcher/docker-compose.yml`
 - `pronterlabs/bifrost/bifrost/input_normalizer.py`
 - `pronterlabs/bifrost/server.py`
+

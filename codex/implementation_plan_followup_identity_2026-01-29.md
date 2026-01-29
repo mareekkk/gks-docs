@@ -4,9 +4,8 @@ Purpose: fix canary identification, prevent legacy memory injection from overrid
 
 ## Executive summary
 The feature is not behaving as intended because the **legacy “Relevant Memory” injection still runs** and **identity exchange fails (503)**, so the canary allowlist is not matched. We must:
-1) make identity exchange reliable so canary matching works,
-2) disable legacy memory injection for canary users to avoid topic hijacking, and
-3) complete the stack: **conversation state**, **follow‑up resolver**, and **two‑pass retrieval** with safe fallbacks for old Memlink tables.
+1) make identity exchange reliable so canary matching works, and
+2) disable legacy memory injection for canary users to avoid topic hijacking.
 
 ## Current symptoms
 - The assistant answers using personal facts (chef, FIFO, etc.) even when the topic is white papers.
@@ -22,8 +21,6 @@ The feature is not behaving as intended because the **legacy “Relevant Memory�
 - Reliable identity exchange so canary matching works.
 - Canary users get the new follow‑up/recency pipeline.
 - Legacy memory injection does not override the current topic for canary users.
-- Conversation state is updated every turn (per chat) and feeds the resolver.
-- Two‑pass retrieval uses recency first, then long‑term facts (tenant/user scoped).
 - Safe rollout with clear rollback.
 
 ## Constraints
@@ -93,19 +90,14 @@ Rollback:
 
 ---
 
-### Phase 3 — Two‑pass retrieval (segment recency + long‑term facts)
-**Objective:** add short‑term segment context and long‑term fact retrieval without breaking memory isolation.
+### Phase 3 — Two‑pass retrieval (recency + long‑term)
+**Objective:** add short‑term recency context without breaking long‑term memory.
 
 Steps:
 1) Confirm dispatcher can reach tenant DB:
    - `TENANT_DB_URL` reachable from dispatcher.
-2) Resolve which tables exist (compat with old Memlink):
-   - Prefer `memlink_segment_summaries` / `memlink_memory_facts`.
-   - Fallback to `tenant_segment_summaries` / `tenant_memory_facts`.
-   - Final fallback: `chat_segment_summaries` / `memory_facts` (chat‑local only).
-3) Recency query returns top‑k segments ordered by updated_at (strong recency bias).
-4) Fact query uses the rewritten query and enforces tenant/user scope via RLS.
-5) Merge logic injects `RECENT_CONTEXT` and relevant facts into the prompt.
+2) Recency query returns `tenant_chat_summaries` for chat.
+3) Merge logic injects `RECENT_CONTEXT` and retains factual memory.
 
 Success criteria:
 - Short‑term summary appears in injected context for canary.
@@ -116,24 +108,7 @@ Rollback:
 
 ---
 
-### Phase 4 — Sidebar page (context stack)
-**Objective:** expose a short “context stack” page from the sidebar that describes the three layers.
-
-Steps:
-1) Add a sidebar link (Context → Active Context).
-2) Create a `/context` page with the 3‑layer summary.
-3) Ensure navigation does not affect chat functionality.
-
-Success criteria:
-- Sidebar link opens the page.
-- Chat still loads normally.
-
-Rollback:
-- Remove the link and page.
-
----
-
-### Phase 5 — Canary validation test plan
+### Phase 4 — Canary validation test plan
 **Manual test sequence (canary user only):**
 1) Ask: “What is a white paper?”
 2) Ask: “What about for software?”
@@ -150,7 +125,6 @@ Expected outcome:
   - auth exchange 200
   - follow‑up resolution output
   - no `Relevant Memory` prepend for canary
-  - recency + memory fact retrieval runs (or fails open)
 - Bifrost logs show:
   - `chatId` set from `X-Chat-Id`
 - PronterLabs chat logs show:
@@ -170,13 +144,6 @@ Expected outcome:
 - Trust Kernel 503 prevents canary matching.
 - Legacy memory injection can still bias the prompt if canary is not matched.
 - If tenant DB is unavailable, recency falls back safely but reduces quality.
-- Old Memlink tables may not include tenant/user columns; fallback must stay chat‑local.
-
-## Confidence
-Estimated confidence: **95%** provided:
-- feature flags remain gated during rollout,
-- tenant DB is reachable from dispatcher, and
-- RLS variables are set for tenant/user in two‑pass retrieval.
 
 ---
 
@@ -185,3 +152,4 @@ Estimated confidence: **95%** provided:
 - `pronterlabs/dispatcher/src/context/*`
 - `pronterlabs/dispatcher/docker-compose.yml`
 - `FOLLOWUP_CANARY_USERS`, `TENANT_DB_URL`, `REDIS_URL`
+
