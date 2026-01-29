@@ -30,6 +30,23 @@ git -C /home/marek/pronterlabs/pronterlabs-chat push origin main
 
 ---
 
+## 0.2) Restore to **layout/dock refresh + chat bubbles** (latest, `bf73af6`)
+**Description:** Restores the updated layout, dock behavior, centered composer, and user chat bubbles.
+
+**Hard reset (rewrites history):**
+```
+git -C /home/marek/pronterlabs/pronterlabs-chat reset --hard bf73af6
+git -C /home/marek/pronterlabs/pronterlabs-chat push origin main --force
+```
+
+**Safe revert (preserves history):**
+```
+git -C /home/marek/pronterlabs/pronterlabs-chat revert bf73af6
+git -C /home/marek/pronterlabs/pronterlabs-chat push origin main
+```
+
+---
+
 ## 1) Revert to **before the loading‑screen fix** (back to `f6487f4` state)
 **Description:** Removes the latest loading/auth refinements and returns to the initial silent‑preload implementation.
 
