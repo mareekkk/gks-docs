@@ -106,3 +106,37 @@ git -C /home/marek/pronterlabs/pronterlabs-chat push origin main --force
 sudo nginx -t
 sudo systemctl reload nginx
 ```
+
+---
+
+## 5) Bifrost healthcheck fix (port 8000, `eb300ac`)
+**Description:** Fixes the Bifrost container healthcheck to probe `http://127.0.0.1:8000/health` (actual server port).
+
+**Safe revert (preserves history):**
+```
+git -C /home/marek/pronterlabs/bifrost revert eb300ac
+git -C /home/marek/pronterlabs/bifrost push origin hardening/2026-01-22-baseline
+```
+
+**Hard reset (rewrites history):**
+```
+git -C /home/marek/pronterlabs/bifrost reset --hard eb300ac^
+git -C /home/marek/pronterlabs/bifrost push origin hardening/2026-01-22-baseline --force
+```
+
+---
+
+## 6) Dispatcher canary allowlist update (akadmin, `5d167fe`)
+**Description:** Adds `akadmin` to the follow‑up canary allowlist in dispatcher compose.
+
+**Safe revert (preserves history):**
+```
+git -C /home/marek/pronterlabs/dispatcher revert 5d167fe
+git -C /home/marek/pronterlabs/dispatcher push origin master
+```
+
+**Hard reset (rewrites history):**
+```
+git -C /home/marek/pronterlabs/dispatcher reset --hard 5d167fe^
+git -C /home/marek/pronterlabs/dispatcher push origin master --force
+```
