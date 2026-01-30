@@ -1,0 +1,8 @@
+               List of relations
+ Schema |     Name      | Type  |    Owner     
+--------+---------------+-------+--------------
+ public | conversations | table | memlink_user
+ public | messages      | table | memlink_user
+ public | outbox_events | table | memlink_user
+(3 rows)
+

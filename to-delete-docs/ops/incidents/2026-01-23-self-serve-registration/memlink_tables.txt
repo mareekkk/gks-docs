@@ -1,0 +1,25 @@
+                     List of relations
+ Schema |           Name            | Type  |    Owner     
+--------+---------------------------+-------+--------------
+ public | job_outbox                | table | memlink_user
+ public | job_runs                  | table | memlink_user
+ public | job_watermarks            | table | memlink_user
+ public | kg_entities               | table | memlink_user
+ public | kg_triples                | table | memlink_user
+ public | memlink_admin_audit       | table | memlink_user
+ public | memlink_chat_summaries    | table | memlink_user
+ public | memlink_control           | table | memlink_user
+ public | memlink_embeddings        | table | memlink_user
+ public | memlink_graph_edges       | table | memlink_user
+ public | memlink_graph_nodes       | table | memlink_user
+ public | memlink_jobs              | table | memlink_user
+ public | memlink_memory_facts      | table | memlink_user
+ public | memlink_query_audit       | table | memlink_user
+ public | memlink_schema_migrations | table | memlink_user
+ public | memlink_segment_summaries | table | memlink_user
+ public | memlink_tenant_configs    | table | memlink_user
+ public | memlink_tenant_mappings   | table | memlink_user
+ public | memlink_tenants           | table | memlink_user
+ public | tenant_schema_migrations  | table | memlink_user
+(20 rows)
+

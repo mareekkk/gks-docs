@@ -1,0 +1,18 @@
+CONTAINER ID   IMAGE                                 COMMAND                  CREATED          STATUS                    PORTS                                                NAMES
+9924f3725d04   ae7001600bce                          "node services/worke…"   51 minutes ago   Up 51 minutes (healthy)                                                        memlink-worker
+d29c620b1535   963cc3f50fb6                          "node services/api/d…"   12 hours ago     Up 12 hours (healthy)     0.0.0.0:3002->3000/tcp, [::]:3002->3000/tcp          memlink-api
+3471507711db   963cc3f50fb6                          "node services/watch…"   12 hours ago     Up 12 hours (healthy)                                                          memlink-watcher
+fd8266855840   pronterlabs-chat-chat-app             "docker-entrypoint.s…"   12 hours ago     Up 12 hours               0.0.0.0:8081->3000/tcp, [::]:8081->3000/tcp          pronterlabs-chat
+fa05bc3fab7f   postgres:16-alpine                    "docker-entrypoint.s…"   20 hours ago     Up 20 hours (healthy)     0.0.0.0:5434->5432/tcp, [::]:5434->5432/tcp          memlink-postgres
+c4ba3fbfaa7c   ollama/ollama:latest                  "/bin/ollama serve"      30 hours ago     Up 30 hours (unhealthy)   0.0.0.0:11434->11434/tcp, [::]:11434->11434/tcp      memlink-ollama
+4bc6be6979af   redis:7.2-alpine                      "docker-entrypoint.s…"   30 hours ago     Up 30 hours (healthy)     0.0.0.0:6380->6379/tcp, [::]:6380->6379/tcp          memlink-redis
+946ab83909d3   dispatcher-dispatcher                 "uvicorn src.main:ap…"   30 hours ago     Up 30 hours (healthy)     0.0.0.0:8003->8000/tcp, [::]:8003->8000/tcp          dispatcher-gateway
+10c4cbbab476   dispatcher-trust-kernel               "uvicorn src.main:ap…"   30 hours ago     Up 30 hours (healthy)     0.0.0.0:8004->8000/tcp, [::]:8004->8000/tcp          dispatcher-authority
+6fd305fa5c58   dispatcher-einbroch                   "uvicorn src.main:ap…"   30 hours ago     Up 30 hours (healthy)     0.0.0.0:8002->8000/tcp, [::]:8002->8000/tcp          dispatcher-execution
+4f3e5a89f3b0   dispatcher-bifrost                    "python server.py"       30 hours ago     Up 30 hours (unhealthy)   8000/tcp                                             dispatcher-bifrost
+f63c93f705af   ghcr.io/goauthentik/server:2024.2.1   "dumb-init -- ak ser…"   38 hours ago     Up 38 hours (healthy)     127.0.0.1:9100->9000/tcp, 127.0.0.1:9543->9443/tcp   docker-server-1
+66bd55827165   ghcr.io/goauthentik/server:2024.2.1   "dumb-init -- ak wor…"   38 hours ago     Up 38 hours (healthy)                                                          docker-worker-1
+ea355af00b9e   redis:alpine                          "docker-entrypoint.s…"   38 hours ago     Up 38 hours (healthy)     6379/tcp                                             docker-redis-1
+ffcc3adfbb20   postgres:16-alpine                    "docker-entrypoint.s…"   38 hours ago     Up 21 hours (healthy)     5432/tcp                                             docker-postgresql-1
+0134f5009e36   dashboard-admin-dashboard             "/docker-entrypoint.…"   40 hours ago     Up 40 hours               0.0.0.0:9200->80/tcp, [::]:9200->80/tcp              admin-dashboard
+facc3cf3e67d   pronterlabs-website                   "/docker-entrypoint.…"   41 hours ago     Up 41 hours               0.0.0.0:8082->80/tcp, [::]:8082->80/tcp              pronterlabs-website
