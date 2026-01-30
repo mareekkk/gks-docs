@@ -200,3 +200,32 @@ git -C /home/marek/pronterlabs/bifrost push origin hardening/2026-01-22-baseline
 git -C /home/marek/pronterlabs/dispatcher reset --hard 7ad051b
 git -C /home/marek/pronterlabs/dispatcher push origin master --force
 ```
+
+---
+
+## 11) Unified Memory Architecture — Phase 1 Baseline (2026-01-30)
+**Description:** Restore point before implementing Phase 1 (Lane Assignment) of the unified memory architecture. Database schema already has all required columns (`lifecycle_state`, `primary_lane`, `secondary_lanes`, `scope`, `workspace_id`). This baseline captures the state before lane classification logic is added to the worker.
+
+**Memlink Repository:**
+- **Branch**: `main`
+- **Commit**: `80ac04acd4ce6c2d71ee6df7d35929c8b4ebfe3e`
+- **Status**: Uncommitted changes present (workspace/RLS work in progress)
+
+**GKS-Docs Repository:**
+- **Branch**: `main`
+- **Commit**: `090ceed4c1c87c36432c51ac4d076add571162f9`
+- **Status**: Clean
+
+**Restore Memlink to clean state (discard uncommitted changes):**
+```
+git -C /home/marek/pronterlabs/memlink reset --hard 80ac04a
+git -C /home/marek/pronterlabs/memlink clean -fd
+docker compose -f /home/marek/pronterlabs/memlink/docker-compose.yml restart memlink-worker memlink-api
+```
+
+**Restore GKS-Docs:**
+```
+git -C /home/marek/pronterlabs/gks-docs reset --hard 090ceed
+```
+
+**Implementation Plan**: See `/home/marek/.gemini/antigravity/brain/3cd1ceb7-36cc-4725-b211-ee41bb7f9d5a/phase1_lane_assignment_plan.md`
